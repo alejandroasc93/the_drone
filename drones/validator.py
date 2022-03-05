@@ -9,4 +9,4 @@ def validate_max_weight(value):
     :return:
     """
     if value > 500:
-        raise ValidationError(_("The weight cannot be more than 500gr."))
+        raise ValidationError(_("The weight cannot be more than 500gr."), params={'value': value})
