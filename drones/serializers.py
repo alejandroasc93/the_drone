@@ -91,3 +91,16 @@ class CheckingLoadedMedicationSerializer(Serializer):
         instance.state = OPTION_CHOICE_STATE_LOADING
         instance.save()
         return instance
+
+
+class BatteryLevelDroneSerializer(ModelSerializer):
+    """
+    Battery Level Drone Serializer
+    """
+
+    class Meta:
+        """
+        Class Meta
+        """
+        model = Drone
+        fields = ("id", "battery_capacity")

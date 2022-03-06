@@ -3,12 +3,13 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from drones.models import Drone
-from drones.serializers import DroneSerializer, MedicinesLoadedByDronesSerializer, CheckingLoadedMedicationSerializer
+from drones.models import Drone, OPTION_CHOICE_STATE_IDLE
+from drones.serializers import DroneSerializer, MedicinesLoadedByDronesSerializer, CheckingLoadedMedicationSerializer, \
+    BatteryLevelDroneSerializer
 
 
 class CreateDroneView(GenericViewSet, CreateAPIView):
@@ -76,3 +77,34 @@ class CheckingLoadedMedicationView(ModelViewSet):
 
 
 checking_loaded_medication_view = CheckingLoadedMedicationView
+
+
+class CheckingAvailableDronesView(GenericViewSet, ListAPIView):
+    """
+    CheckingAvailableDrones View
+    """
+    queryset = Drone.objects.all()
+    serializer_class = DroneSerializer
+
+    def filter_queryset(self, queryset):
+        """
+
+        :param queryset:
+        :return:
+        """
+        queryset = super(CheckingAvailableDronesView, self).filter_queryset(queryset)
+        return queryset.filter(battery_capacity__gt=25, state=OPTION_CHOICE_STATE_IDLE)
+
+
+checking_available_drone_view = CheckingAvailableDronesView
+
+
+class CheckingBatteryLevelView(GenericViewSet, RetrieveAPIView):
+    """
+    CheckingBatteryLevel View
+    """
+    queryset = Drone.objects.all()
+    serializer_class = BatteryLevelDroneSerializer
+
+
+checking_battery_level_view = CheckingBatteryLevelView
