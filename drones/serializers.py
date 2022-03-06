@@ -1,13 +1,11 @@
 from abc import ABC
 
 from django.db import transaction
-from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ListField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from drones.models import Drone, MedicinesLoadedByDrones, OPTION_CHOICE_STATE_LOADED
-from drones.validator import validate_loading_medications
 from medications.models import Medication
 
 
