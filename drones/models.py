@@ -4,10 +4,10 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 from drones.validator import validate_max_weight
 
-OPTION_CHOICE_MODEL_LIGHTWEIGHT = "LIGHTWEIGHT"
-OPTION_CHOICE_MODEL_MIDDLEWEIGHT = "MIDDLEWEIGHT"
-OPTION_CHOICE_MODEL_CRUISERWEIGHT = "CRUISERWEIGHT"
-OPTION_CHOICE_MODEL_HEAVYWEIGHT = "HEAVYWEIGHT"
+OPTION_CHOICE_MODEL_LIGHTWEIGHT = "Lightweight"
+OPTION_CHOICE_MODEL_MIDDLEWEIGHT = "Middleweight"
+OPTION_CHOICE_MODEL_CRUISERWEIGHT = "Cruiserweight"
+OPTION_CHOICE_MODEL_HEAVYWEIGHT = "Heavyweight"
 
 CHOICE_MODEL = (
     (OPTION_CHOICE_MODEL_LIGHTWEIGHT, OPTION_CHOICE_MODEL_HEAVYWEIGHT),
@@ -41,7 +41,7 @@ class Drone(models.Model):
     model = models.CharField(_("Model"), choices=CHOICE_MODEL, max_length=25)
     weight_limit = models.FloatField(_("Weight limit"), validators=[validate_max_weight])
     battery_capacity = models.IntegerField(_("Battery capacity"), default=100)
-    state = models.CharField(_("State"), choices=CHOICE_STATE, max_length=25)
+    state = models.CharField(_("State"), choices=CHOICE_STATE, max_length=25, default=OPTION_CHOICE_STATE_IDLE)
 
     class Meta:
         db_table = "tbl_drone"
