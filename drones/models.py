@@ -1,8 +1,10 @@
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 from drones.validator import validate_max_weight
+from medications.models import Medication
 
 OPTION_CHOICE_MODEL_LIGHTWEIGHT = "Lightweight"
 OPTION_CHOICE_MODEL_MIDDLEWEIGHT = "Middleweight"
@@ -50,3 +52,21 @@ class Drone(models.Model):
 
     def __str__(self):
         return self.serial_number
+
+
+class MedicinesLoadedByDrones(models.Model):
+    """
+    MedicinesLoadedByDrones model
+    """
+    drone = models.ForeignKey(Drone, verbose_name='drone', on_delete=models.CASCADE)
+    medication = models.ForeignKey(Medication, verbose_name='medication', on_delete=models.CASCADE)
+    load_date = models.DateTimeField(_("Load date"), auto_now_add=True, )
+    delivery_date = models.DateTimeField(_("Delivery date"), null=True, blank=True)
+
+    class Meta:
+        db_table = "tbl_medicines_loaded_by_drones"
+        verbose_name = "MedicinesLoadedByDrone"
+        verbose_name_plural = "MedicinesLoadedByDrones"
+
+    def __str__(self):
+        return f"{self.drone} -- {self.medication}"
