@@ -3,7 +3,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
-from drones.validator import validate_max_weight
+from drones.validator import validate_max_weight, validate_battery_capacity
 from medications.models import Medication
 
 OPTION_CHOICE_MODEL_LIGHTWEIGHT = "Lightweight"
@@ -42,7 +42,7 @@ class Drone(models.Model):
     serial_number = models.CharField(_("Serial number"), max_length=100)
     model = models.CharField(_("Model"), choices=CHOICE_MODEL, max_length=25)
     weight_limit = models.FloatField(_("Weight limit"), validators=[validate_max_weight])
-    battery_capacity = models.IntegerField(_("Battery capacity"), default=100)
+    battery_capacity = models.IntegerField(_("Battery capacity"), default=100, validators=[validate_battery_capacity])
     state = models.CharField(_("State"), choices=CHOICE_STATE, max_length=25, default=OPTION_CHOICE_STATE_IDLE)
 
     class Meta:
@@ -70,3 +70,20 @@ class MedicinesLoadedByDrones(models.Model):
 
     def __str__(self):
         return f"{self.drone} -- {self.medication}"
+
+
+class HistoryBatteryLevel(models.Model):
+    """
+    HistoryBatteryLevel model
+    """
+    drone = models.ForeignKey(Drone, verbose_name='drone', on_delete=models.CASCADE)
+    battery = models.IntegerField(_("Battery capacity"), default=100)
+    date = models.DateTimeField(_("Date"), auto_now_add=True)
+
+    class Meta:
+        db_table = "tbl_history_battery_level"
+        verbose_name = "HistoryBatteryLevel"
+        verbose_name_plural = "HistoryBatteryLevels"
+
+    def __str__(self):
+        return f"{self.drone.serial_number}, {self.battery}%"

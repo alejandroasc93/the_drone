@@ -10,8 +10,18 @@ def validate_max_weight(value):
     :param value:
     :return:
     """
-    if value > 500:
-        raise ValidationError(_("The weight cannot be more than 500gr."))
+    if 0 > value > 500:
+        raise ValidationError(_("The weight cannot be greater than 500gr and less than 0gr."))
+
+
+def validate_battery_capacity(value):
+    """
+
+    :param value:
+    :return:
+    """
+    if 0 > value > 100:
+        raise ValidationError(_("The battery capacity cannot be greater than 100% and less than 0%."))
 
 
 def validate_loading_medications(drone, medications):
