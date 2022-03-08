@@ -9,7 +9,7 @@ routers.register(r'drone/checking-available', checking_available_drone_view,
                  basename='checking_available_drone_view')
 routers.register(r'drone/checking-battery-level', checking_battery_level_view,
                  basename='checking_battery_level_view')
-routers.register(r'drone', checking_loaded_medication_view,
+routers.register(r'drone/checking-loaded', checking_loaded_medication_view,
                  basename='checking_loaded_medication_view')
 
 urlpatterns = []

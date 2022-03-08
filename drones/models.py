@@ -44,6 +44,7 @@ class Drone(models.Model):
     weight_limit = models.FloatField(_("Weight limit"), validators=[validate_max_weight])
     battery_capacity = models.IntegerField(_("Battery capacity"), default=100, validators=[validate_battery_capacity])
     state = models.CharField(_("State"), choices=CHOICE_STATE, max_length=25, default=OPTION_CHOICE_STATE_IDLE)
+    medication = models.ManyToManyField(Medication, related_name='medication', through='MedicinesLoadedByDrones')
 
     class Meta:
         db_table = "tbl_drone"
@@ -52,6 +53,13 @@ class Drone(models.Model):
 
     def __str__(self):
         return self.serial_number
+
+    def get_loaded_medications(self):
+        """
+        Get loaded medications
+        :return:
+        """
+        return self.medication.filter(medicinesloadedbydrones__delivery_date=None)
 
 
 class MedicinesLoadedByDrones(models.Model):

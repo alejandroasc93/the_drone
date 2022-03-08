@@ -50,30 +50,12 @@ class CreateMedicinesLoadedByDroneView(GenericViewSet, CreateAPIView):
 create_medicines_loaded_by_drone_view = CreateMedicinesLoadedByDroneView
 
 
-class CheckingLoadedMedicationView(ModelViewSet):
+class CheckingLoadedMedicationView(ModelViewSet, RetrieveAPIView):
     """
     CheckingLoadedMedication View
     """
     queryset = Drone.objects.all()
     serializer_class = CheckingLoadedMedicationSerializer
-
-    @action(detail=True, methods=['post'])
-    def checking(self, request, pk=None):
-        """
-
-        :param request:
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        response = {
-            'message': 'Drone ready to loading.'
-        }
-        return Response(response, status=status.HTTP_201_CREATED)
 
 
 checking_loaded_medication_view = CheckingLoadedMedicationView
