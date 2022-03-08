@@ -1,13 +1,15 @@
+from django.core.exceptions import BadRequest
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from drones.models import Drone, OPTION_CHOICE_STATE_IDLE
+from drones.models import Drone, OPTION_CHOICE_STATE_IDLE, OPTION_CHOICE_STATE_LOADED
 from drones.serializers import DroneSerializer, MedicinesLoadedByDronesSerializer, CheckingLoadedMedicationSerializer, \
     BatteryLevelDroneSerializer
 
@@ -56,6 +58,19 @@ class CheckingLoadedMedicationView(ModelViewSet, RetrieveAPIView):
     """
     queryset = Drone.objects.all()
     serializer_class = CheckingLoadedMedicationSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        instance = self.get_object()
+        if instance.state != OPTION_CHOICE_STATE_LOADED:
+            return Response({'message': 'The drone is not in loaded status'}, HTTP_400_BAD_REQUEST)
+        return super(CheckingLoadedMedicationView, self).retrieve(request, *args, **kwargs)
 
 
 checking_loaded_medication_view = CheckingLoadedMedicationView
