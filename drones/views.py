@@ -68,8 +68,8 @@ class CheckingLoadedMedicationView(ModelViewSet, RetrieveAPIView):
         :return:
         """
         instance = self.get_object()
-        if instance.state != OPTION_CHOICE_STATE_LOADED:
-            return Response({'message': 'The drone is not in loaded status'}, HTTP_400_BAD_REQUEST)
+        # if instance.state != OPTION_CHOICE_STATE_LOADED:
+        #     return Response({'message': 'The drone is not in loaded status'}, HTTP_400_BAD_REQUEST)
         return super(CheckingLoadedMedicationView, self).retrieve(request, *args, **kwargs)
 
 

@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from django.conf.urls.static import static
+
+from the_drone import settings
 
 routers = DefaultRouter()
 
@@ -24,3 +27,9 @@ urlpatterns = [
     path('drone', include('drones.urls')),
     path('api/', include(routers.urls))
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_URL)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
