@@ -38,9 +38,10 @@ class MedicinesLoadedByDronesSerializer(Serializer):
         :return:
         """
         values = super(MedicinesLoadedByDronesSerializer, self).validate(attrs)
-        validate_loading_medications(self.instance, values.get('medications'))
+        drone = values.get('drone')
+        validate_loading_medications(drone, values.get('medications'))
 
-        if self.instance.state != OPTION_CHOICE_STATE_LOADING:
+        if drone.state != OPTION_CHOICE_STATE_LOADING:
             raise ValidationError("The drone is not in loading status.")
 
         return values
